@@ -28,4 +28,4 @@ Proyek ini menggunakan **GitHub Actions** untuk memastikan setiap perubahan kode
 ## 🚀 Cara Menjalankan
 1. Clone repositori ini:
    ```bash
-   git clone [https://github.com/USERNAME/devops-capstone-project.git](https://github.com/USERNAME/devops-capstone-project.git)
+   git clone [https://github.com/Bassam16Sem/devops-capstone-project.git](https://github.com/USERNAME/devops-capstone-project.git)

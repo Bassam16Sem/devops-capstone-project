@@ -1,36 +1,39 @@
 name: CI Build
 
-# Kapan alur ini berjalan?
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "master" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "master" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Langkah mengambil kode
+      # 1. Langkah untuk mengambil kode (Checkout)
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2. Setup Python (Lingkungan untuk pengujian)
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
+      # 3. Instalasi Dependensi
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
+          python -m pip install --upgrade pip
+          pip install flake8 nosetests flask flask-sqlalchemy
 
-      # 2. Langkah memeriksa kode (Linting)
-      - name: Lint with Flake8
+      # 4. Langkah untuk memeriksa kode (Linting/Checking)
+      - name: Lint with flake8
         run: |
+          # Periksa kesalahan sintaksis atau undefined names
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
-      # 3. Langkah menjalankan unit test (Nosetests)
-      - name: Run unit tests with Nosetests
+      # 5. Langkah untuk menjalankan unit test menggunakan nosetests
+      - name: Run unit tests with nosetests
         run: |
-          nosetests
+          nosetests -v --with-spec --spec-color

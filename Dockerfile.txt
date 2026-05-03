@@ -1,6 +1,23 @@
+# 1. Menggunakan base image yang ditentukan
 FROM python:3.9-slim
+
+# 2. Membuat direktori kerja (Working Directory)
 WORKDIR /app
+
+# 3. Menginstal dependensi sistem yang diperlukan (jika ada)
+# Lalu menyalin file requirements dan menginstal dependensi Python
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 4. MENYALIN SEMUA FILE APLIKASI (Kriteria: Copy all necessary files)
 COPY . .
-CMD ["python", "app.py"]
+
+# 5. MENGIMPLEMENTASIKAN NON-ROOT USER (Kriteria: Security Practice)
+# Membuat user baru bernama 'theuser' untuk menjalankan aplikasi
+RUN useradd -m theuser && chown -R theuser /app
+USER theuser
+
+# 6. MENENTUKAN PERINTAH UNTUK MENJALANKAN SERVICE (Kriteria: Running the service)
+# Sesuaikan 'service:app' dengan entry point aplikasi Anda (misal: Flask atau Gunicorn)
+EXPOSE 8080
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "service:app"]
